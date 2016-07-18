@@ -13,7 +13,7 @@ use Phalcon\DI\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Config\Adapter\Ini as ConfigIni;
-
+use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 define('APP_PATH', realpath('..') . '/');
 require_once "../vendor/autoload.php";
 
@@ -38,6 +38,9 @@ try{
     $di->set('view',function(){
         $view = new View();
         $view->setViewsDir("../app/views");
+        $view->registerEngines(array(
+            '.phtml' => 'Phalcon\Mvc\View\Engine\Volt'
+        ));
         return $view;
     });
 
@@ -58,7 +61,15 @@ try{
            'dbname'=>'myblog'
        ));
     });
-
+    //6. 注册session服务
+    $di->set('session',function(){
+        $session = new Phalcon\Session\Adapter\Files();
+        $session->start();
+        return $session;
+    });
+    $di->set('mytest',function(){
+        return array('data'=>1);
+    });
     // Handle the request
     $application = new Application($di);
 

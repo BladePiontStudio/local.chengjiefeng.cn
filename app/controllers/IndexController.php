@@ -10,8 +10,7 @@ use Phalcon\Mvc\Controller;
 class IndexController   extends Controller
 {
     public function indexAction(){
-        echo "hello!<br/>";
-        echo $this->tag->linkTo("signup","sign Up here !");
+        $this->view->setVar("title","首页");
     }
     public function registerAction(){
         echo "register";
